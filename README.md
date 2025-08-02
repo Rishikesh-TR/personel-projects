@@ -1,269 +1,190 @@
-# CityResilience Masterplan - Desktop Application
+**City Resilience Web Application**
 
-A comprehensive desktop application for urban planners, architects, and government officials to redesign cities with disaster-resilient infrastructure and eco-friendly upgrades.
+This document provides an overview, installation guide, and usage instructions for the City Resilience web application. Whether you're cloning from GitHub or working locally, follow the steps below to set up, run, and maintain the application.
 
-## Features
+---
 
-### 🏗️ Core Functionality
-- **Interactive City Editor**: Drag-and-drop tools for infrastructure modification
-- **Disaster Simulation**: Test resilience against earthquakes, floods, tsunamis, and heatwaves
-- **Compliance Checker**: Verify designs against IS 1893, NBC 2016, and other standards
-- **Eco-Infrastructure Planning**: Solar panel placement, green spaces, pedestrian zones
-- **Project Management**: Multi-project support with team collaboration
+## Table of Contents
 
-### 🎨 Desktop-Optimized Design
-- **Large Screen Layout**: Optimized for desktop monitors (1920x1080+)
-- **Professional Interface**: Clean, modern design inspired by CAD software
-- **Keyboard Shortcuts**: Efficient workflow for power users
-- **Multi-Panel Layout**: Simultaneous viewing of maps, properties, and tools
+1. [Project Overview](#project-overview)
+2. [Prerequisites](#prerequisites)
+3. [Repository Structure](#repository-structure)
+4. [Environment Variables](#environment-variables)
+5. [Installation and Setup](#installation-and-setup)
+6. [Running in Development](#running-in-development)
+7. [Building for Production](#building-for-production)
+8. [Starting the Production Server](#starting-the-production-server)
+9. [API Endpoints](#api-endpoints)
+10. [Database](#database)
+11. [File Uploads](#file-uploads)
+12. [Key Features](#key-features)
+13. [Troubleshooting](#troubleshooting)
 
-### 🔧 Technical Stack
-- **Frontend**: React 18 + TypeScript + Tailwind CSS
-- **Backend**: Node.js + Express + SQLite
-- **Maps**: Mapbox GL JS for interactive mapping
-- **Authentication**: JWT-based secure authentication
-- **Database**: SQLite with Sequelize ORM
+---
 
-## Installation & Setup
+## 1. Project Overview
 
-### Prerequisites
-- Node.js 18+ and npm
-- Git
+The City Resilience web application is a full-stack platform to:
 
-### 1. Clone Repository
-```bash
-git clone https://github.com/yourusername/city-resilience-masterplan.git
-cd city-resilience-masterplan
+* Manage projects related to urban resilience
+* Run simulations and compliance checks
+* View interactive maps powered by Mapbox
+* Authenticate users and secure routes
+
+The front end is built with Vite and modern TypeScript, while the back end uses Express.js and SQLite via Sequelize.
+
+## 2. Prerequisites
+
+Before you begin, ensure you have the following installed on your system:
+
+* **Node.js** (v16 or higher) and **npm**
+* **Git** for version control
+* **Mapbox Account** to obtain an access token
+
+## 3. Repository Structure
+
+```text
+project/
+├── .bolt/               # Bolt-specific configuration
+├── dist/                # Production build output (after `npm run build`)
+├── dist_server/         # (empty placeholder)
+├── server/              # Back-end source code
+│   ├── middleware/      # Express middleware modules
+│   ├── models/          # Sequelize models (SQLite DB)
+│   ├── routes/          # API route handlers
+│   ├── uploads/         # Uploaded files (images, data)
+│   ├── index.js         # Express entry point
+│   └── package.json     # Server dependencies and scripts
+├── src/                 # Front-end source code
+│   ├── assets/          # Static assets
+│   └── ...              # Vite app files
+├── .env.example         # Sample environment variables file
+├── package.json         # Root dependencies & scripts
+├── vite.config.ts       # Vite configuration
+├── tailwind.config.js   # Tailwind CSS config
+└── README.md            # (This file)
 ```
 
-### 2. Install Dependencies
-```bash
-# Install frontend dependencies
-npm install
+## 4. Environment Variables
 
-# Install backend dependencies
-cd server
-npm install
-cd ..
-```
+Copy `.env.example` to `.env` in the root of the project (same level as `package.json`) and update the values:
 
-### 3. Environment Configuration
-```bash
-# Copy environment template
-cp .env.example .env
-
-# Edit .env file with your configuration
-nano .env
-```
-
-Required environment variables:
-```env
+```ini
 NODE_ENV=development
 PORT=5000
-JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+DATABASE_URL=sqlite:./database.sqlite
+JWT_SECRET=your-secure-jwt-key
 FRONTEND_URL=http://localhost:5173
-MAPBOX_ACCESS_TOKEN=your-mapbox-access-token
+MAPBOX_ACCESS_TOKEN=your-mapbox-token-here
+MAX_FILE_SIZE=10485760
+UPLOAD_PATH=./server/uploads
+# Optional external APIs
+NDMA_API_KEY=your-ndma-api-key
+GOOGLE_EARTH_ENGINE_KEY=your-google-earth-engine-key
 ```
 
-### 4. Database Setup
-```bash
-# Database will be automatically created on first run
-# SQLite file will be created at: server/database.sqlite
-```
+* **JWT\_SECRET**: Generate a strong random string for production.
+* **MAPBOX\_ACCESS\_TOKEN**: Obtain from your Mapbox account.
 
-### 5. Start Development Servers
+## 5. Installation and Setup
+
+1. Clone the repository:
+
+   ```bash
+   ```
+
+git clone [https://github.com/](https://github.com/)<username>/city-resilience-app.git
+cd city-resilience-app
+
+````
+
+2. Install dependencies (root `package.json` will install both client and server deps):
+
 ```bash
-# Start both frontend and backend
+npm install
+````
+
+3. Ensure `.env` is present and configured.
+
+## 6. Running in Development
+
+To start both server and client simultaneously:
+
+```bash
 npm run dev:full
-
-# Or start separately:
-# Backend: npm run dev:server
-# Frontend: npm run dev
 ```
 
-### 6. Access Application
-- **Frontend**: http://localhost:5173
-- **Backend API**: http://localhost:5000/api
+* **Server**: Runs on `http://localhost:5000`
+* **Client**: Runs on `http://localhost:5173`
 
-## GitHub Repository Setup
+You can also run them separately:
 
-### 1. Create GitHub Repository
+* `npm run dev` — front-end only
+* `npm run dev:server` — back-end only
+
+## 7. Building for Production
+
+To build the front end for production:
+
 ```bash
-# Initialize git (if not already done)
-git init
-
-# Add all files
-git add .
-
-# Initial commit
-git commit -m "Initial commit: CityResilience Masterplan desktop application"
-
-# Add remote origin (replace with your repository URL)
-git remote add origin https://github.com/yourusername/city-resilience-masterplan.git
-
-# Push to GitHub
-git push -u origin main
-```
-
-### 2. Repository Structure
-```
-city-resilience-masterplan/
-├── src/                    # Frontend React application
-│   ├── components/         # Reusable UI components
-│   ├── pages/             # Application pages
-│   ├── services/          # API services
-│   ├── contexts/          # React contexts
-│   └── types/             # TypeScript definitions
-├── server/                # Backend Node.js application
-│   ├── models/            # Database models
-│   ├── routes/            # API routes
-│   ├── middleware/        # Express middleware
-│   └── uploads/           # File uploads directory
-├── public/                # Static assets
-├── dist/                  # Production build output
-└── docs/                  # Documentation
-```
-
-### 3. GitHub Actions (Optional)
-Create `.github/workflows/ci.yml` for automated testing:
-
-```yaml
-name: CI/CD Pipeline
-
-on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        cache: 'npm'
-    
-    - name: Install dependencies
-      run: |
-        npm install
-        cd server && npm install
-    
-    - name: Run tests
-      run: npm test
-    
-    - name: Build application
-      run: npm run build
-```
-
-## Production Deployment
-
-### 1. Build Application
-```bash
-# Build frontend
 npm run build
-
-# Prepare server
-npm run build:server
 ```
 
-### 2. Environment Variables
-Set production environment variables:
-```env
-NODE_ENV=production
-PORT=5000
-JWT_SECRET=your-production-jwt-secret
-FRONTEND_URL=https://yourdomain.com
-MAPBOX_ACCESS_TOKEN=your-mapbox-token
-```
+The output will be in the `dist/` directory.
 
-### 3. Start Production Server
+## 8. Starting the Production Server
+
+After building:
+
 ```bash
-npm start
+npm run start
 ```
 
-## Desktop-Specific Features
+This will run the Express server in production mode (`NODE_ENV=production`) and serve the API.
 
-### Optimized for Large Screens
-- **Minimum Resolution**: 1366x768
-- **Recommended**: 1920x1080 or higher
-- **Multi-monitor Support**: Drag panels to secondary monitors
+> **Note:** If you want to serve front-end static files from the server, you can configure Express to serve `dist/` as static assets.
 
-### Keyboard Shortcuts
-- `Ctrl + N`: New Project
-- `Ctrl + S`: Save Project
-- `Ctrl + Z`: Undo
-- `Ctrl + Y`: Redo
-- `Space`: Pan mode
-- `Esc`: Cancel current tool
+## 9. API Endpoints
 
-### Performance Optimizations
-- **Efficient Rendering**: Optimized for desktop GPUs
-- **Large Dataset Handling**: Virtualized lists for large projects
-- **Memory Management**: Automatic cleanup of unused resources
+| Method | Path                       | Description                         |
+| ------ | -------------------------- | ----------------------------------- |
+| POST   | `/api/auth/register`       | Register a new user                 |
+| POST   | `/api/auth/login`          | Log in and obtain a JWT token       |
+| GET    | `/api/projects`            | List all projects                   |
+| POST   | `/api/projects`            | Create a new project                |
+| GET    | `/api/projects/:id`        | Get details of a specific project   |
+| PUT    | `/api/projects/:id`        | Update project                      |
+| DELETE | `/api/projects/:id`        | Delete project                      |
+| GET    | `/api/simulations/:projId` | List simulations for a project      |
+| POST   | `/api/simulations/:projId` | Create a simulation                 |
+| GET    | `/api/compliance/:projId`  | Run compliance checks for a project |
+| GET    | `/api/maps`                | Fetch map features (requires token) |
 
-## API Documentation
+## 10. Database
 
-### Authentication Endpoints
-- `POST /api/auth/login` - User login
-- `POST /api/auth/register` - User registration
-- `GET /api/auth/me` - Get current user
+* Powered by SQLite via Sequelize.
+* The database file is created at `database.sqlite` in the project root.
+* No external database setup is required.
 
-### Project Endpoints
-- `GET /api/projects` - Get all projects
-- `POST /api/projects` - Create new project
-- `GET /api/projects/:id` - Get project details
-- `PUT /api/projects/:id` - Update project
-- `DELETE /api/projects/:id` - Delete project
+## 11. File Uploads
 
-### Simulation Endpoints
-- `POST /api/simulations` - Run disaster simulation
-- `GET /api/simulations/:id` - Get simulation results
+* Uploaded files (e.g., map shapefiles, images) are stored in `server/uploads`.
+* Maximum file size is configured via `MAX_FILE_SIZE` in `.env`.
 
-### Compliance Endpoints
-- `POST /api/compliance` - Run compliance check
-- `GET /api/compliance/:id` - Get compliance results
+## 12. Key Features
 
-## Contributing
+* **User Authentication** with JWT
+* **Project Management** (create, read, update, delete)
+* **Simulations**: Run and view results
+* **Compliance Checks**: Automated reports
+* **Interactive Maps**: Visualize city data via Mapbox
 
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
+## 13. Troubleshooting
 
-## License
+* **Port Conflicts**: Ensure ports 5000 and 5173 are free or update in `.env`.
+* **Environment Variables**: Missing `MAPBOX_ACCESS_TOKEN` will break map functionality.
+* **Database Errors**: Delete `database.sqlite` and let Sequelize recreate it if schema changes.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+---
 
-## Support
-
-For support and questions:
-- Create an issue on GitHub
-- Email: support@cityresilience.com
-- Documentation: https://docs.cityresilience.com
-
-## Roadmap
-
-### Phase 1 (Current)
-- ✅ Basic project management
-- ✅ Interactive map editor
-- ✅ Disaster simulations
-- ✅ Compliance checking
-
-### Phase 2 (Next)
-- 🔄 Advanced 3D visualization
-- 🔄 AI-powered design suggestions
-- 🔄 Real-time collaboration
-- 🔄 Mobile companion app
-
-### Phase 3 (Future)
-- 📋 Integration with CAD software
-- 📋 Government approval workflows
-- 📋 Citizen feedback portal
-- 📋 IoT sensor integration
+*Documentation generated on July 27, 2025.*
